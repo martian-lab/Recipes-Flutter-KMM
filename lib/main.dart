@@ -7,6 +7,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'category.dart';
+import 'recipe.dart';
 import 'interactor/platform/platform.dart';
 import 'package:flutter/services.dart';
 
@@ -36,20 +37,61 @@ void main() {
 class Counter with ChangeNotifier {
   int value = 0;
   static const platform = const MethodChannel(METHOD_CHANNEL_NAME);
-  List<Category> categories;
+  List<Category> categories = [];
 
   Counter() {
+    // platform.setMethodCallHandler((call) async {
+    //   print('updateCategoriesList, method=' + call.method + ' args=' + call.arguments);
+    //
+    //   var parsedJson = json.decode(call.arguments) as List;
+    //   categories = parsedJson.map((model) => Category.fromJson(model)).toList();
+    //
+    //   print('decoded=' + categories.toString());
+    //   notifyListeners();
+    //   //}
+    // });
     platform.setMethodCallHandler((call) async {
-      print('updateCategoriesList, method=' + call.method + ' args=' + call.arguments);
+      switch( call.method ){
 
-      var parsedJson = json.decode(call.arguments) as List;
-      categories = parsedJson.map((model) => Category.fromJson(model)).toList();
+        case 'updateCategoryList':
+          var parsedJson = json.decode(call.arguments) as List;
+          categories = parsedJson.map((model) => Category.fromJson(model)).toList();
+          notifyListeners();
+          break;
 
-      print('decoded=' + categories.toString());
-      notifyListeners();
-      //}
+        case 'updateRecipeList':
+          print('recipes');
+          var catId = call.arguments['categoryId'] as int;
+          print('recipes catid=' + catId.toString());
+          var parsedJson = json.decode(call.arguments['recipeList']) as List;
+          //print('recipes parsedJson=' + parsedJson.toString());
+          //var recipes = parsedJson.map((model) => Recipe.fromJson(model)).toList();
+          //print('recipes=' + recipes.toString());
+          notifyListeners();
+          break;
+      }
     });
-    platform.invokeMethod("method", null);
+    // platform.setMethodCallHandler((call) async {
+    //   switch( call.method ){
+    //
+    //     // case 'updateCategoryList':
+    //     //   var parsedJson = json.decode(call.arguments) as List;
+    //     //   categories = parsedJson.map((model) => Category.fromJson(model)).toList();
+    //     //   break;
+    //
+    //     case 'updateRecipeList':
+    //       print('recipes');
+    //       var catId = call.arguments['categoryId'] as int;
+    //       print('recipes catid=' + catId.toString());
+    //       var parsedJson = json.decode(call.arguments['recipeList']) as List;
+    //       //print('recipes parsedJson=' + parsedJson.toString());
+    //       //var recipes = parsedJson.map((model) => Recipe.fromJson(model)).toList();
+    //       //print('recipes=' + recipes.toString());
+    //       notifyListeners();
+    //       break;
+    //   }
+    // });
+    //platform.invokeMethod("method", null);
   }
 
   void enlarge(){

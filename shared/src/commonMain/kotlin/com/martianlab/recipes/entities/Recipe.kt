@@ -1,8 +1,10 @@
 package com.martianlab.recipes.entities
 
 import kotlinx.datetime.DateTimeUnit
+import kotlinx.serialization.Serializable
 
 
+@Serializable
 data class Recipe(
     val id : Long,
     val title : String,
@@ -18,7 +20,7 @@ data class Recipe(
     val comments: List<RecipeComment>
 )
 
-
+@Serializable
 data class RecipeStage(
     val id : Long,
     val recipeId : Long,
@@ -26,7 +28,7 @@ data class RecipeStage(
     val text : String,
     val step : Int
 )
-
+@Serializable
 data class RecipeIngredient(
     val id : Long,
     val recipeId : Long,
@@ -35,7 +37,7 @@ data class RecipeIngredient(
     val measureUnit : String,
     val position : Int
 )
-
+@Serializable
 data class RecipeComment(
     val id : Long,
     val recipeId : Long,
@@ -46,7 +48,7 @@ data class RecipeComment(
     val parentCommentId : Long?,
     val photoURLs : List<String>?
 )
-
+@Serializable
 data class RecipeTag(
     val id: Long,
     val recipeId : Long,

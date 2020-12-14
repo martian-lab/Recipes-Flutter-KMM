@@ -12,7 +12,8 @@ interface RecipesInteractor {
     fun goTo( destination: Destination)
 
 
-    suspend fun getCategories() : Flow<List<Category>>
+    suspend fun getCategories() : List<Category>
+    suspend fun getCategoriesFlow() : Flow<List<Category>>
     suspend fun getCategoriesAsJsonFlow() : Flow<String>
     suspend fun getCategoriesList() : String
 

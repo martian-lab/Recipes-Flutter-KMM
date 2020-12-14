@@ -12,11 +12,22 @@ class RecipesViewModel(
 ) : ViewModel(), CoroutineScope by CoroutineScope(Dispatchers.IO){
 
     init{
+//        launch {
+//            interactor.firstLaunchCheck()
+//            interactor.getCategoriesAsJsonFlow().collect {
+//                withContext(Dispatchers.Main) {
+//                    channel.invokeMethod("updateCategoryList", it)
+//                }
+//            }
+//        }
         launch {
-            interactor.firstLaunchCheck()
-            interactor.getCategoriesAsJsonFlow().collect {
-                withContext(Dispatchers.Main) {
-                    channel.invokeMethod("updateCategoriesList", it)
+            interactor.getCategories().forEach { category ->
+                launch {
+                    interactor.getRecipesAsJsonFlow(category).collect {
+                        withContext(Dispatchers.Main) {
+                            channel.invokeMethod("updateRecipeList", mapOf("categoryId" to category.id, "recipeList" to it))
+                        }
+                    }
                 }
             }
         }

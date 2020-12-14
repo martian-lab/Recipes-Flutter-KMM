@@ -5,7 +5,6 @@ import com.martianlab.recipes.domain.api.DbApi
 import com.martianlab.recipes.domain.api.RoutingApi
 import com.martianlab.recipes.entities.*
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -32,15 +31,19 @@ internal class RecipesInteractorImpl constructor(
         recipesRepository.loadRecipesToDb()
     }
 
-    override suspend fun getCategories(): Flow<List<Category>> {
+    override suspend fun getCategoriesFlow(): Flow<List<Category>> {
         return recipesRepository.loadCategoriesFromDb()
     }
-    
+
+    override suspend fun getCategories(): List<Category> {
+        return recipesRepository.getCategories()
+    }
+
     override suspend fun getCategoriesList() : String = 
             serializer.encodeToString(recipesRepository.getCategories())
 
     override suspend fun getCategoriesAsJsonFlow(): Flow<String> 
-        = getCategories().map { serializer.encodeToString(it) }
+        = getCategoriesFlow().map { serializer.encodeToString(it) }
     
 
     override suspend fun loadToDbFlow(): Flow<String> {
