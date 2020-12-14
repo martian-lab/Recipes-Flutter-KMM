@@ -1,0 +1,133 @@
+import kotlin.collections.List;
+
+CREATE TABLE IF NOT EXISTS `recipeEntity` (
+    `id` INTEGER UNIQUE PRIMARY KEY AUTOINCREMENT NOT NULL,
+    `title` TEXT NOT NULL,
+    `text` TEXT NOT NULL,
+    `complexity` INTEGER as Int NOT NULL,
+    `personCount` INTEGER as Int NOT NULL,
+    `imageURL` TEXT NOT NULL,
+    `rating` REAL,
+    `ratingVotes` INTEGER as Int
+);
+
+CREATE TABLE IF NOT EXISTS `userEntity` (
+    `id` INTEGER as Int PRIMARY KEY AUTOINCREMENT NOT NULL,
+    `name` TEXT NOT NULL,
+    `pin` INTEGER as Int NOT NULL
+);
+
+CREATE UNIQUE INDEX IF NOT EXISTS `index_User_pin` ON `userEntity` (`pin`);
+
+
+CREATE TABLE IF NOT EXISTS `recipeTagEntity` (
+    `id` INTEGER NOT NULL,
+    `title` TEXT NOT NULL,
+    `recipeId` INTEGER NOT NULL,
+PRIMARY KEY(`id`,`recipeId`),
+FOREIGN KEY(`recipeId`) REFERENCES `recipeEntity`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE );
+
+CREATE INDEX IF NOT EXISTS `index_recipe_tag_recipeId` ON `recipeTagEntity` (`recipeId`);
+
+CREATE INDEX IF NOT EXISTS `index_recipe_tag_title` ON `recipeTagEntity` (`title`);
+
+CREATE TABLE IF NOT EXISTS `recipeCommentEntity` (
+    `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    `recipeId` INTEGER NOT NULL,
+    `authorId` INTEGER NOT NULL,
+    `authorName` TEXT NOT NULL,
+    `date` TEXT NOT NULL,
+    `text` TEXT NOT NULL,
+    `parentCommentId` INTEGER,
+    `photoURLs` TEXT AS List<String>,
+FOREIGN KEY(`recipeId`) REFERENCES `recipeEntity`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE );
+
+CREATE INDEX IF NOT EXISTS `index_recipe_comment_recipeId` ON `recipeCommentEntity` (`recipeId`);
+
+CREATE TABLE IF NOT EXISTS `recipeIngredientEntity` (
+    `id` INTEGER NOT NULL,
+    `recipeId` INTEGER NOT NULL,
+    `title` TEXT NOT NULL,
+    `quantity` TEXT NOT NULL,
+    `measureUnit` TEXT NOT NULL,
+    `position` INTEGER as Int NOT NULL,
+PRIMARY KEY(`id`,`recipeId`),
+FOREIGN KEY(`recipeId`) REFERENCES `recipeEntity`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE );
+
+CREATE INDEX IF NOT EXISTS `index_recipe_ingredient_recipeId` ON `recipeIngredientEntity` (`recipeId`);
+
+CREATE INDEX IF NOT EXISTS `index_recipe_ingredient_title` ON `recipeIngredientEntity` (`title`);
+
+CREATE TABLE IF NOT EXISTS `recipeStageEntity` (
+    `id` INTEGER NOT NULL,
+    `recipeId` INTEGER NOT NULL,
+    `imageURL` TEXT NOT NULL,
+    `text` TEXT NOT NULL,
+    `step` INTEGER as Int NOT NULL,
+PRIMARY KEY(`id`),
+FOREIGN KEY(`recipeId`) REFERENCES `recipeEntity`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE );
+
+CREATE INDEX IF NOT EXISTS `index_recipe_entity_recipeId` ON `recipeStageEntity` (`recipeId`);
+
+getRecipesByTagTitle:
+SELECT recipeEntity.* FROM recipeEntity JOIN recipeTagEntity ON recipeEntity.id = recipeId WHERE recipeTagEntity.title = ? ORDER BY recipeEntity.rating DESC, recipeEntity.id DESC;
+
+getRecipes:
+SELECT recipeEntity.* FROM recipeEntity JOIN recipeTagEntity ON recipeEntity.id = recipeId;
+
+getById:
+SELECT * FROM recipeEntity WHERE id = ?;
+
+insert:
+INSERT OR REPLACE INTO `recipeEntity` (`id`,`title`,`text`,`complexity`,`personCount`,`imageURL`,`rating`,`ratingVotes`) VALUES (nullif(?, 0),?,?,?,?,?,?,?);
+
+insertRecipe:
+INSERT OR REPLACE INTO `recipeEntity`  VALUES ?;
+
+insertComment:
+INSERT OR REPLACE INTO `recipeCommentEntity`  VALUES ?;
+
+insertIngredient:
+INSERT OR REPLACE INTO `recipeIngredientEntity`  VALUES ?;
+
+insertStage:
+INSERT OR REPLACE INTO `recipeStageEntity`  VALUES ?;
+
+insertTag:
+INSERT OR REPLACE INTO `recipeTagEntity`  VALUES ?;
+
+insertComments:
+INSERT OR REPLACE INTO `recipeCommentEntity` (`id`,`recipeId`,`authorId`,`authorName`,`date`,`text`,`parentCommentId`,`photoURLs`) VALUES (nullif(?, 0),?,?,?,?,?,?,?);
+
+insertIngredients:
+INSERT OR REPLACE INTO `recipeIngredientEntity` (`id`,`recipeId`,`title`,`quantity`,`measureUnit`,`position`) VALUES (?,?,?,?,?,?);
+
+insertStages:
+INSERT OR REPLACE INTO `recipeStageEntity` (`id`,`recipeId`,`imageURL`,`text`,`step`) VALUES (?,?,?,?,?);
+
+insertTags:
+INSERT OR REPLACE INTO `recipeTagEntity` (`id`,`title`,`recipeId`) VALUES (?,?,?);
+
+removeTag:
+DELETE FROM recipeTagEntity WHERE recipeId = ? AND title  = ?;
+
+searchRecipes:
+SELECT * FROM recipeEntity WHERE recipeEntity.title LIKE ?;
+
+searchIngredients:
+SELECT * FROM recipeIngredientEntity WHERE recipeIngredientEntity.title LIKE ?;
+
+getByIngredient:
+SELECT recipeEntity.* FROM recipeEntity JOIN recipeIngredientEntity ON recipeEntity.id = recipeId WHERE recipeIngredientEntity.title = ?;
+
+getCommentsByRecipe:
+SELECT * FROM recipeCommentEntity WHERE recipeId = ?;
+
+getTagsByRecipe:
+SELECT * FROM recipeTagEntity WHERE recipeId = ?;
+
+getIngredientsByRecipe:
+SELECT * FROM recipeIngredientEntity WHERE recipeId = ?;
+
+getStagesByRecipe:
+SELECT * FROM recipeStageEntity WHERE recipeId = ?;

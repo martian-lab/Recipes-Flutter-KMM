@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">utkonos.ru</domain>
+        <domain includeSubdomains="true">www.utkonos.ru</domain>
+        <domain includeSubdomains="true">beta.utkonos.ru</domain>
+        <domain includeSubdomains="true">test.utkonos.ru</domain>
+        <domain includeSubdomains="true">api-maps.yandex.ru</domain>
+        <domain includeSubdomains="true">www.vk.com</domain>
+        <domain includeSubdomains="true">www.odnoklassniki.ru</domain>
+    </domain-config>
+</network-security-config>

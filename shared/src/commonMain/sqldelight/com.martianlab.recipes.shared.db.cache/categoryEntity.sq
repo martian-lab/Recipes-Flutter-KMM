@@ -1,0 +1,29 @@
+CREATE TABLE IF NOT EXISTS `categoryEntity` (
+    `id` INTEGER PRIMARY KEY ON CONFLICT REPLACE AUTOINCREMENT NOT NULL,
+    `imageUrl` TEXT,
+    `title` TEXT NOT NULL,
+    `sort` INTEGER as Int NOT NULL,
+    `total` INTEGER as Int NOT NULL
+);
+
+getAll:
+SELECT *
+FROM categoryEntity;
+
+
+getById:
+SELECT *
+FROM categoryEntity
+WHERE id = ?;
+
+insert:
+INSERT INTO categoryEntity
+VALUES ?;
+
+insertAll:
+INSERT INTO categoryEntity
+VALUES ?;
+
+updatecategory:
+INSERT OR REPLACE INTO categoryEntity
+VALUES ?;

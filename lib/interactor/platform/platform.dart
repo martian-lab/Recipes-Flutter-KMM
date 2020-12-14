@@ -1,0 +1,1 @@
+const String METHOD_CHANNEL_NAME = 'recipes/platform';
