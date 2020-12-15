@@ -39,29 +39,36 @@ internal class RecipesInteractorImpl constructor(
         return recipesRepository.getCategories()
     }
 
-    override suspend fun getCategoriesList() : String = 
+    override suspend fun getCategoriesAsJson() : String = 
             serializer.encodeToString(recipesRepository.getCategories())
 
     override suspend fun getCategoriesAsJsonFlow(): Flow<String> 
         = getCategoriesFlow().map { serializer.encodeToString(it) }
-    
+
+    override suspend fun getRecipesAsJson(category: Category?): String {
+        return serializer.encodeToString(
+                category?.let { 
+                            recipesRepository.loadRecipes(listOf(RecipeTag(category.id, 0L, category.title))) } ?: 
+                            recipesRepository.loadRecipes()
+        )
+    }
 
     override suspend fun loadToDbFlow(): Flow<String> {
         return recipesRepository.loadRecipesToDbFlow()
     }
 
-    override suspend fun getRecipes(): Flow<List<Recipe>> {
-        return recipesRepository.loadRecipes()
+    override suspend fun getRecipesFlow(): Flow<List<Recipe>> {
+        return recipesRepository.loadRecipesFlow()
     }
 
-    override suspend fun getRecipes(category: Category): Flow<List<Recipe>> {
+    override suspend fun getRecipesFlow(category: Category): Flow<List<Recipe>> {
         val tags = listOf(RecipeTag(category.id, 0L, category.title))
-        return recipesRepository.loadRecipes(tags)
+        return recipesRepository.loadRecipesFlow(tags)
     }
 
     override suspend fun getRecipesAsJsonFlow(category: Category?): Flow<String> =
             run{
-                category?.let {  getRecipes(category) } ?: getRecipes() 
+                category?.let { getRecipesFlow(category) } ?: getRecipesFlow() 
             }.map { serializer.encodeToString(it) }
     
     
@@ -76,9 +83,9 @@ internal class RecipesInteractorImpl constructor(
     }
 
     override suspend fun firstLaunchCheck() {
-        if( recipesRepository.getCategories().isEmpty() ){
+        //if( recipesRepository.getCategories().isEmpty() ){
             recipesRepository.loadDb()
-        }
+        //}
     }
 
     override suspend fun searchIngredients(contains: String): List<RecipeIngredient> = recipesRepository.searchIngredients(contains)

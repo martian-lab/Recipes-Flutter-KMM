@@ -15,19 +15,20 @@ interface RecipesInteractor {
     suspend fun getCategories() : List<Category>
     suspend fun getCategoriesFlow() : Flow<List<Category>>
     suspend fun getCategoriesAsJsonFlow() : Flow<String>
-    suspend fun getCategoriesList() : String
+    suspend fun getCategoriesAsJson() : String
 
     
     suspend fun getRecipesAsJsonFlow(category: Category? = null) : Flow<String>
-    
+    suspend fun getRecipesAsJson(category: Category? = null) : String
+
     suspend fun loadToDb()
     
     suspend fun loadToDbFlow() : Flow<String>
-    suspend fun getRecipes() : Flow<List<Recipe>>
+    suspend fun getRecipesFlow() : Flow<List<Recipe>>
     suspend fun getRecipe(id:Long) : Recipe?
     //fun getRecipesPaged(category: Category) : LiveData<PagedList<Recipe>>
 
-    suspend fun getRecipes(category: Category) : Flow<List<Recipe>>
+    suspend fun getRecipesFlow(category: Category) : Flow<List<Recipe>>
 
     suspend fun searchIngredients(contains: String): List<RecipeIngredient>
     suspend fun searchRecipes(contains: String): Flow<List<Recipe>>

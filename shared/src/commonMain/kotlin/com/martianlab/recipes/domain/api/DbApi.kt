@@ -10,9 +10,13 @@ import kotlinx.coroutines.flow.Flow
 
 internal interface DbApi{
 
-    suspend fun getRecipes(tag: RecipeTag) : Flow<List<Recipe>>
+    suspend fun getRecipesFlow(tag: RecipeTag) : Flow<List<Recipe>>
 
-    suspend fun getRecipes() : Flow<List<Recipe>>
+    suspend fun getRecipesFlow() : Flow<List<Recipe>>
+
+    suspend fun getRecipes(tag: RecipeTag) : List<Recipe>
+
+    suspend fun getRecipes() : List<Recipe>
 
     //fun getRecipesPages(tags : List<RecipeTag>): DataSource.Factory<Int, Recipe>
 

@@ -46,8 +46,15 @@ internal class RecipesRepositoryImpl constructor(
 //        return dbApi.getRecipesPages(tags).toLiveData(config)
 //    }
 
-    override suspend fun loadRecipes(): Flow<List<Recipe>> {
-        val recipes = dbApi.getRecipes()//.also { it.forEach {  println("RECIPES:::: recipe=" + it ) } }
+    override suspend fun loadRecipes(): List<Recipe> =
+        dbApi.getRecipes()
+
+
+    override suspend fun loadRecipes(tags: List<RecipeTag>): List<Recipe> =
+        dbApi.getRecipes(tags[0])
+
+    override suspend fun loadRecipesFlow(): Flow<List<Recipe>> {
+        val recipes = dbApi.getRecipesFlow()//.also { it.forEach {  println("RECIPES:::: recipe=" + it ) } }
         //println("RECIPES: from db size=" + recipes.size )
 //        if( recipes.isEmpty() ){
 //            loadRecipesFromFile().also {
@@ -58,8 +65,8 @@ internal class RecipesRepositoryImpl constructor(
         return recipes//.also{ it.forEach { println("RECIPES: loaded=" + it ) } }
     }
 
-    override suspend fun loadRecipes(tags: List<RecipeTag>): Flow<List<Recipe>> {
-        val recipes = dbApi.getRecipes(tags[0])
+    override suspend fun loadRecipesFlow(tags: List<RecipeTag>): Flow<List<Recipe>> {
+        val recipes = dbApi.getRecipesFlow(tags[0])
         //println("RECIPES: from db size=" + recipes.ize )
 //        if( recipes.isEmpty() ){
 ////            loadRecipesFromFile().also {
@@ -118,7 +125,7 @@ internal class RecipesRepositoryImpl constructor(
                 }
             }
             offset += count
-        }while( offset < 1/*category.total*/ )
+        }while( offset < category.total )
     }
 
     private suspend fun loadCategoriesToDb(categoryList: List<Category>) : List<Long>{

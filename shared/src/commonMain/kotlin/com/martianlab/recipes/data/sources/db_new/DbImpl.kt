@@ -47,12 +47,18 @@ internal class DbImpl(driverFactory: DatabaseDriverFactory) : DbApi {
     private fun <From :Any, To>  Flow<Query<From>>.mapToList( context: CoroutineContext = Dispatchers.Default, entityMapper: (From) -> To ): Flow<List<To>> =
             mapToList(context).map { list -> list.map { entityMapper(it)} }
 
-    override suspend fun getRecipes(tag: RecipeTag): Flow<List<Recipe>> =
+    override suspend fun getRecipesFlow(tag: RecipeTag): Flow<List<Recipe>> =
         recipesDb.getRecipesByTagTitle(tag.title).toRecipeList()
 
-    override suspend fun getRecipes(): Flow<List<Recipe>> =
+    override suspend fun getRecipesFlow(): Flow<List<Recipe>> =
         recipesDb.getRecipes().toRecipeList()
 
+    override suspend fun getRecipes(tag: RecipeTag): List<Recipe> =
+        recipesDb.getRecipesByTagTitle(tag.title).executeAsList().map { it.toRecipeWithDependenciesEntity().toRecipe() }
+    
+
+    override suspend fun getRecipes(): List<Recipe> =
+        recipesDb.getRecipes().executeAsList().map { it.toRecipeWithDependenciesEntity().toRecipe() }
 
     override suspend fun getRecipeById(id: Long): Recipe =
         recipesDb

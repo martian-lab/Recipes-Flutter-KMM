@@ -121,7 +121,7 @@ class RecipeComment{
     parentCommentId = data['parentCommentId'];
     recipeId = data['recipeId'];
 
-    photoURLs = (data['imageUrl'] as List).map((e) => e.toString());
+    photoURLs = null ;//data['photoURLs'].toString().isNotEmpty ?  (data['photoURLs'] as List).map((e) => e.toString()) : null ?? null;
   }
 
   RecipeComment(this.id, this.recipeId, this.authorId, this.authorName,

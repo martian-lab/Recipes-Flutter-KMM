@@ -9,9 +9,13 @@ internal interface RecipesRepository {
 
     suspend fun insertRecipes(recipes: List<Recipe>)
 
-    suspend fun loadRecipes() : Flow<List<Recipe>>
+    suspend fun loadRecipesFlow() : Flow<List<Recipe>>
 
-    suspend fun loadRecipes(tags : List<RecipeTag>) : Flow<List<Recipe>>
+    suspend fun loadRecipesFlow(tags : List<RecipeTag>) : Flow<List<Recipe>>
+
+    suspend fun loadRecipes() : List<Recipe>
+
+    suspend fun loadRecipes(tags : List<RecipeTag>) : List<Recipe>
 
     suspend fun getRecipe( id : Long ) : Recipe?
 

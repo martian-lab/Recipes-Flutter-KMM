@@ -38,8 +38,14 @@ class Counter with ChangeNotifier {
   int value = 0;
   static const platform = const MethodChannel(METHOD_CHANNEL_NAME);
   List<Category> categories = [];
+  //List<Recipe> recipes = [];
 
   Counter() {
+    platform.setMethodCallHandler((call) async {
+      if( call.method == 'updateCategoryList'){
+        loadCategories();
+      }
+    });
     // platform.setMethodCallHandler((call) async {
     //   print('updateCategoriesList, method=' + call.method + ' args=' + call.arguments);
     //
@@ -50,27 +56,27 @@ class Counter with ChangeNotifier {
     //   notifyListeners();
     //   //}
     // });
-    platform.setMethodCallHandler((call) async {
-      switch( call.method ){
-
-        case 'updateCategoryList':
-          var parsedJson = json.decode(call.arguments) as List;
-          categories = parsedJson.map((model) => Category.fromJson(model)).toList();
-          notifyListeners();
-          break;
-
-        case 'updateRecipeList':
-          print('recipes');
-          var catId = call.arguments['categoryId'] as int;
-          print('recipes catid=' + catId.toString());
-          var parsedJson = json.decode(call.arguments['recipeList']) as List;
-          //print('recipes parsedJson=' + parsedJson.toString());
-          //var recipes = parsedJson.map((model) => Recipe.fromJson(model)).toList();
-          //print('recipes=' + recipes.toString());
-          notifyListeners();
-          break;
-      }
-    });
+    // platform.setMethodCallHandler((call) async {
+    //   switch( call.method ){
+    //
+    //     case 'updateCategoryList':
+    //       var parsedJson = json.decode(call.arguments) as List;
+    //       categories = parsedJson.map((model) => Category.fromJson(model)).toList();
+    //       notifyListeners();
+    //       break;
+    //
+    //     case 'updateRecipeList':
+    //       print('recipes');
+    //       var catId = call.arguments['categoryId'] as int;
+    //       print('recipes catid=' + catId.toString());
+    //       var parsedJson = json.decode(call.arguments['recipeList']) as List;
+    //       //print('recipes parsedJson=' + parsedJson.toString());
+    //       recipes = parsedJson.map((model) => Recipe.fromJson(model)).toList();
+    //       recipes.forEach((element) { print('recipe=' + element.toString());});
+    //       notifyListeners();
+    //       break;
+    //   }
+    // });
     // platform.setMethodCallHandler((call) async {
     //   switch( call.method ){
     //
@@ -92,24 +98,57 @@ class Counter with ChangeNotifier {
     //   }
     // });
     //platform.invokeMethod("method", null);
+    loadCategories();
   }
 
-  void enlarge(){
-     Future<String> res = platform.invokeMethod("method", null);
+  void loadCategories() {
+    Future<String> res = platform.invokeMethod("getCategories", null);
 
-     res.then((String value) async{
-       var parsedJson = json.decode(value) as List;
-       var categories2 = parsedJson.map((model) => Category.fromJson(model)).toList();
-       print('decoded2=' + categories2.toString());
-       categories.addAll(categories2);
-       notifyListeners();
-     });
+    res.then((String value) async {
+      var parsedJson = json.decode(value) as List;
+      categories = parsedJson.map((model) => Category.fromJson(model)).toList();
+      print('categories num=' + categories.length.toString());
+      categories.forEach((category) {
+        loadRecipes(category).then((value) {
+          category.recipes = value;
+          notifyListeners();
+        });
+      });
+      print('loaded category[0] recipes length=' +
+          categories[0].recipes.length.toString());
+      notifyListeners();
+    });
   }
 
-  void increment() {
-    value++;
-    notifyListeners();
+  Future<List<Recipe>> loadRecipes(Category category) {
+    print('load category id=' + category.id.toString());
+    Future<String> res =
+        platform.invokeMethod("getRecipesByCategory", category.id);
+
+    var result = res.then((String value) async {
+      var parsedJson = json.decode(value) as List;
+      return parsedJson.map((model) => Recipe.fromJson(model)).toList();
+    });
+    return result;
   }
+
+  // void enlarge() {
+  //   Future<String> res = platform.invokeMethod("method", null);
+  //
+  //   res.then((String value) async {
+  //     var parsedJson = json.decode(value) as List;
+  //     var categories2 =
+  //         parsedJson.map((model) => Category.fromJson(model)).toList();
+  //     print('decoded2=' + categories2.toString());
+  //     categories.addAll(categories2);
+  //     notifyListeners();
+  //   });
+  // }
+
+  // void increment() {
+  //   value++;
+  //   notifyListeners();
+  // }
 }
 
 class MyApp extends StatelessWidget {
@@ -132,22 +171,25 @@ class MyHomePage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Flutter Demo Home Page'),
       ),
-      body: Consumer<Counter>(
-        builder: (context, counter, child) => ListView.builder(
+      body: Consumer<Counter>(builder: (context, counter, child) {
+
+        return ListView.builder(
           padding: const EdgeInsets.all(16),
           itemCount: counter.categories.length,
           itemBuilder: (context, i) {
-            if( i >= counter.categories.length-3 )
-              counter.enlarge();
+            // if( i >= counter.categories.length-3 )
+            //   counter.enlarge();
             return ListTile(
-              contentPadding: const EdgeInsets.all(16),
+                contentPadding: const EdgeInsets.all(16),
                 title: Text(
-              counter.categories[i].title,
-              style: TextStyle(fontSize:24),
-            ));
+                  counter.categories[i].title +
+                      '  ' +
+                      counter.categories[i].recipes.length.toString(),
+                  style: TextStyle(fontSize: 24),
+                ));
           },
-        ),
-      ),
+        );
+      }),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           // You can access your providers anywhere you have access
@@ -167,7 +209,9 @@ class MyHomePage extends StatelessWidget {
           // taps the FloatingActionButton, we are not in the build method here.
           // We should use context.read().
           var counter = context.read<Counter>();
-          counter.increment();
+          //counter.increment();
+          print('loaded category[0] recipes length=' +
+              counter.categories[0].recipes.length.toString());
         },
         tooltip: 'Increment',
         child: Icon(Icons.add),

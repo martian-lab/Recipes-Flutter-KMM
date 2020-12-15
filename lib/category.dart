@@ -3,6 +3,8 @@
 
 
 //@JsonSerializable()
+import 'package:my_flutter_app/recipe.dart';
+
 class Category{
 
   int id;
@@ -10,6 +12,7 @@ class Category{
   String imageUrl;
   int sort;
   int total;
+  List<Recipe> recipes = [];
 
   Category(this.id, this.title, this.imageUrl, this.sort, this.total);
 
