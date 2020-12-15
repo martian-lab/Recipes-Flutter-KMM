@@ -7,7 +7,7 @@ class Recipe{
 
   int id;
   String title;
-  String imageUrl;
+  String imageURL;
   String text;
   int complexity;
   int personCount;
@@ -18,13 +18,13 @@ class Recipe{
   List<RecipeIngredient> ingredients;
   List<RecipeComment> comments;
 
-  Recipe(this.id, this.title, this.imageUrl);
+  Recipe(this.id, this.title, this.imageURL);
 
   Recipe.fromJson(Map<String, dynamic> data) {
     id = data['id'];
     title = data['title'];
-    imageUrl = data['imageUrl'].toString().isNotEmpty
-        ? data['imageUrl']
+    imageURL = data['imageURL'].toString().isNotEmpty
+        ? data['imageURL']
         : null ?? null;
     text = data['text'];
     complexity = data['complexity'];
@@ -40,7 +40,7 @@ class Recipe{
 
   @override
   String toString() {
-    return 'Recipe{id: $id, title: $title, imageUrl: $imageUrl, text: $text, complexity: $complexity, personCount: $personCount, rating: $rating, ratingVotes: $ratingVotes, tags: $tags, stages: $stages, ingredients: $ingredients, comments: $comments}';
+    return 'Recipe{id: $id, title: $title, imageUrl: $imageURL, text: $text, complexity: $complexity, personCount: $personCount, rating: $rating, ratingVotes: $ratingVotes, tags: $tags, stages: $stages, ingredients: $ingredients, comments: $comments}';
   }
 
 // factory Category.fromJson(Map<String, dynamic> json) => _$CategoryFromJson(json);

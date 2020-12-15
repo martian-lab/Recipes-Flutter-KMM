@@ -5,25 +5,18 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:my_flutter_app/home_screen.dart';
 import 'package:provider/provider.dart';
 import 'category.dart';
 import 'recipe.dart';
 import 'interactor/platform/platform.dart';
 import 'package:flutter/services.dart';
+import 'package:my_flutter_app/constants.dart';
 
 void main() {
   runApp(
-    // Provide the model to all widgets within the app. We're using
-    // ChangeNotifierProvider because that's a simple way to rebuild
-    // widgets when a model changes. We could also just use
-    // Provider, but then we would have to listen to Counter ourselves.
-    //
-    // Read Provider's docs to learn about all the available providers.
     ChangeNotifierProvider(
-      // Initialize the model in the builder. That way, Provider
-      // can own Counter's lifecycle, making sure to call `dispose`
-      // when not needed anymore.
-      create: (context) => Counter(),
+      create: (context) => Loader(),
       child: MyApp(),
     ),
   );
@@ -31,73 +24,21 @@ void main() {
 
 /// Simplest possible model, with just one field.
 ///
-/// [ChangeNotifier] is a class in `flutter:foundation`. [Counter] does
+/// [ChangeNotifier] is a class in `flutter:foundation`. [Loader] does
 /// _not_ depend on Provider.
 ///
-class Counter with ChangeNotifier {
+class Loader with ChangeNotifier {
   int value = 0;
   static const platform = const MethodChannel(METHOD_CHANNEL_NAME);
   List<Category> categories = [];
   //List<Recipe> recipes = [];
 
-  Counter() {
+  Loader() {
     platform.setMethodCallHandler((call) async {
       if( call.method == 'updateCategoryList'){
         loadCategories();
       }
     });
-    // platform.setMethodCallHandler((call) async {
-    //   print('updateCategoriesList, method=' + call.method + ' args=' + call.arguments);
-    //
-    //   var parsedJson = json.decode(call.arguments) as List;
-    //   categories = parsedJson.map((model) => Category.fromJson(model)).toList();
-    //
-    //   print('decoded=' + categories.toString());
-    //   notifyListeners();
-    //   //}
-    // });
-    // platform.setMethodCallHandler((call) async {
-    //   switch( call.method ){
-    //
-    //     case 'updateCategoryList':
-    //       var parsedJson = json.decode(call.arguments) as List;
-    //       categories = parsedJson.map((model) => Category.fromJson(model)).toList();
-    //       notifyListeners();
-    //       break;
-    //
-    //     case 'updateRecipeList':
-    //       print('recipes');
-    //       var catId = call.arguments['categoryId'] as int;
-    //       print('recipes catid=' + catId.toString());
-    //       var parsedJson = json.decode(call.arguments['recipeList']) as List;
-    //       //print('recipes parsedJson=' + parsedJson.toString());
-    //       recipes = parsedJson.map((model) => Recipe.fromJson(model)).toList();
-    //       recipes.forEach((element) { print('recipe=' + element.toString());});
-    //       notifyListeners();
-    //       break;
-    //   }
-    // });
-    // platform.setMethodCallHandler((call) async {
-    //   switch( call.method ){
-    //
-    //     // case 'updateCategoryList':
-    //     //   var parsedJson = json.decode(call.arguments) as List;
-    //     //   categories = parsedJson.map((model) => Category.fromJson(model)).toList();
-    //     //   break;
-    //
-    //     case 'updateRecipeList':
-    //       print('recipes');
-    //       var catId = call.arguments['categoryId'] as int;
-    //       print('recipes catid=' + catId.toString());
-    //       var parsedJson = json.decode(call.arguments['recipeList']) as List;
-    //       //print('recipes parsedJson=' + parsedJson.toString());
-    //       //var recipes = parsedJson.map((model) => Recipe.fromJson(model)).toList();
-    //       //print('recipes=' + recipes.toString());
-    //       notifyListeners();
-    //       break;
-    //   }
-    // });
-    //platform.invokeMethod("method", null);
     loadCategories();
   }
 
@@ -111,7 +52,8 @@ class Counter with ChangeNotifier {
       categories.forEach((category) {
         loadRecipes(category).then((value) {
           category.recipes = value;
-          notifyListeners();
+          if( categories.every((element) => element.recipes.length > 0 ))
+            notifyListeners();
         });
       });
       print('loaded category[0] recipes length=' +
@@ -131,35 +73,21 @@ class Counter with ChangeNotifier {
     });
     return result;
   }
-
-  // void enlarge() {
-  //   Future<String> res = platform.invokeMethod("method", null);
-  //
-  //   res.then((String value) async {
-  //     var parsedJson = json.decode(value) as List;
-  //     var categories2 =
-  //         parsedJson.map((model) => Category.fromJson(model)).toList();
-  //     print('decoded2=' + categories2.toString());
-  //     categories.addAll(categories2);
-  //     notifyListeners();
-  //   });
-  // }
-
-  // void increment() {
-  //   value++;
-  //   notifyListeners();
-  // }
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
+      title: 'Foodplex Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+          primaryColor: kPrimaryColor,
+          scaffoldBackgroundColor: kBackgroundColor,
+          textTheme: Theme.of(context).textTheme.apply(bodyColor: kTextColor),
+          visualDensity: VisualDensity.adaptivePlatformDensity
       ),
-      home: MyHomePage(),
+      home: HomeScreen(),
     );
   }
 }
@@ -171,7 +99,7 @@ class MyHomePage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Flutter Demo Home Page'),
       ),
-      body: Consumer<Counter>(builder: (context, counter, child) {
+      body: Consumer<Loader>(builder: (context, counter, child) {
 
         return ListView.builder(
           padding: const EdgeInsets.all(16),
@@ -208,7 +136,7 @@ class MyHomePage extends StatelessWidget {
           // Since we're in a callback that will be called whenever the user
           // taps the FloatingActionButton, we are not in the build method here.
           // We should use context.read().
-          var counter = context.read<Counter>();
+          var counter = context.read<Loader>();
           //counter.increment();
           print('loaded category[0] recipes length=' +
               counter.categories[0].recipes.length.toString());
