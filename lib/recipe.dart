@@ -43,6 +43,12 @@ class Recipe{
     return 'Recipe{id: $id, title: $title, imageUrl: $imageURL, text: $text, complexity: $complexity, personCount: $personCount, rating: $rating, ratingVotes: $ratingVotes, tags: $tags, stages: $stages, ingredients: $ingredients, comments: $comments}';
   }
 
+  static final Map<int,String> compexities = {1 : 'низкая', 2 : 'средняя', 3: 'высокая'};
+
+  String getComplexityName() =>
+      compexities[complexity];
+
+
 // factory Category.fromJson(Map<String, dynamic> json) => _$CategoryFromJson(json);
   //
   // /// `toJson` is the convention for a class to declare support for serialization
