@@ -25,52 +25,52 @@ import kotlin.coroutines.CoroutineContext
 internal class DbImpl(driverFactory: DatabaseDriverFactory) : DbApi {
 
     private val driver = driverFactory.createDriver()
-    private val db = AppDatabase(driver, recipeCommentEntityAdapter = RecipeCommentEntity.Adapter(photoURLsAdapter = Converters.listOfStringsAdapter))
-
+    private val db = AppDatabase(
+            driver = driver,
+            recipeCommentEntityAdapter = RecipeCommentEntity.Adapter(Converters.listOfStringsAdapter)
+    )
 
     private val recipesDb = db.recipeEntityQueries
     private val categoryDb = db.categoryEntityQueries
 
-    private fun RecipeEntity.toRecipeWithDependenciesEntity() : RecipeWithDependenciesEntity {
+    private fun RecipeEntity.toRecipeWithDependenciesEntity(): RecipeWithDependenciesEntity {
 
         val tags = recipesDb.getTagsByRecipe(id).executeAsList().toSet()
         val stages = recipesDb.getStagesByRecipe(id).executeAsList()
         val comments = recipesDb.getCommentsByRecipe(id).executeAsList()
         val ingredients = recipesDb.getIngredientsByRecipe(id).executeAsList()
 
-        return RecipeWithDependenciesEntity( this, tags, stages, ingredients, comments)
+        return RecipeWithDependenciesEntity(this, tags, stages, ingredients, comments)
     }
 
-    private fun Query<RecipeEntity>.toRecipeList(): Flow<List<Recipe>> =
-            asFlow().mapToList{ it.toRecipeWithDependenciesEntity().toRecipe() }
-
-    private fun <From :Any, To>  Flow<Query<From>>.mapToList( context: CoroutineContext = Dispatchers.Default, entityMapper: (From) -> To ): Flow<List<To>> =
-            mapToList(context).map { list -> list.map { entityMapper(it)} }
 
     override suspend fun getRecipesFlow(tag: RecipeTag): Flow<List<Recipe>> =
-        recipesDb.getRecipesByTagTitle(tag.title).toRecipeList()
+            recipesDb.getRecipesByTagTitle(tag.title).toRecipeList()
 
     override suspend fun getRecipesFlow(): Flow<List<Recipe>> =
-        recipesDb.getRecipes().toRecipeList()
-
-    override suspend fun getRecipes(tag: RecipeTag): List<Recipe> =
-        recipesDb.getRecipesByTagTitle(tag.title).executeAsList().map { it.toRecipeWithDependenciesEntity().toRecipe() }
-    
-
-    override suspend fun getRecipes(): List<Recipe> =
-        recipesDb.getRecipes().executeAsList().map { it.toRecipeWithDependenciesEntity().toRecipe() }
+            recipesDb.getRecipes().toRecipeList()
 
     override suspend fun getRecipeById(id: Long): Recipe =
-        recipesDb
-            .getById(id)
-            .executeAsOne()
-            .toRecipeWithDependenciesEntity()
-            .toRecipe()
+            recipesDb
+                    .getById(id)
+                    .executeAsOne()
+                    .toRecipeWithDependenciesEntity()
+                    .toRecipe()
 
+    override suspend fun getCategoriesFlow(): Flow<List<Category>> =
+            categoryDb.getAll().asFlow().mapToList { it.toModel() }
 
-    override suspend fun insert(recipe: Recipe): Long {
+    override suspend fun insertCategories(categoryList: List<Category>): List<Long> {
+        categoryList.forEach { categoryDb.insert(it.toEntity()) }
+        return emptyList()
+    }
+
+    override suspend fun insert(recipeList: List<Recipe>) =
+            recipeList.forEach { insert(it) }
+
+    private fun insert(recipe: Recipe): Long {
         recipesDb.insertRecipe(recipe.toEntity())
-        with(recipe){
+        with(recipe) {
             insertCommentList(comments)
             insertStageList(stages)
             insertIngredientList(ingredients)
@@ -79,53 +79,22 @@ internal class DbImpl(driverFactory: DatabaseDriverFactory) : DbApi {
         return 1
     }
 
-    override suspend fun insert(recipeList: List<Recipe>) =
-        recipeList.forEach { insert(it) }
-
     private fun insertCommentList(list: List<RecipeComment>) =
-        list.forEach { recipesDb.insertComment(it.toEntity()) }
+            list.forEach { recipesDb.insertComment(it.toEntity()) }
 
     private fun insertIngredientList(list: List<RecipeIngredient>) =
-        list.forEach { recipesDb.insertIngredient(it.toEntity()) }
+            list.forEach { recipesDb.insertIngredient(it.toEntity()) }
 
     private fun insertStageList(list: List<RecipeStage>) =
-        list.forEach { recipesDb.insertStage(it.toEntity()) }
+            list.forEach { recipesDb.insertStage(it.toEntity()) }
 
     private fun insertTagList(list: List<RecipeTag>) =
-        list.forEach { recipesDb.insertTag(it.toEntity()) }
+            list.forEach { recipesDb.insertTag(it.toEntity()) }
 
 
-    override suspend fun loadCategories(): Flow<List<Category>> =
-        categoryDb.getAll().asFlow().mapToList{  it.toModel() }
+    private fun Query<RecipeEntity>.toRecipeList(): Flow<List<Recipe>> =
+            asFlow().mapToList { it.toRecipeWithDependenciesEntity().toRecipe() }
 
-    override suspend fun getCategories(): List<Category> =
-        categoryDb.getAll().executeAsList().map { it.toModel() }
-
-
-    override suspend fun insertCategories(categoryList: List<Category>): List<Long> {
-        categoryList.forEach { categoryDb.insert(it.toEntity()) }
-        return emptyList()
-    }
-
-    override suspend fun searchIngredients(contains: String): List<RecipeIngredient> =
-        recipesDb.searchIngredients(contains).executeAsList().map { it.toRecipeIngredient() }
-
-    override suspend fun searchRecipes(contains: String): Flow<List<Recipe>> =
-        recipesDb.searchRecipes(contains).toRecipeList()
-
-    override suspend fun setFavorite(recipe: Recipe) {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun removeFavorite(recipe: Recipe) {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun getFavorites(): List<Recipe> {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun getRecipesByIngredient(ingredient: RecipeIngredient): List<Recipe> {
-        TODO("Not yet implemented")
-    }
+    private fun <From : Any, To> Flow<Query<From>>.mapToList(context: CoroutineContext = Dispatchers.Default, entityMapper: (From) -> To): Flow<List<To>> =
+            mapToList(context).map { list -> list.map { entityMapper(it) } }
 }

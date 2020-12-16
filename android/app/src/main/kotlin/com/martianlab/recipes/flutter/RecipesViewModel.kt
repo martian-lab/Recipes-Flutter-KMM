@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import com.martianlab.recipes.domain.RecipesInteractor
 import io.flutter.plugin.common.MethodChannel
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.first
 
 class RecipesViewModel(
         val interactor: RecipesInteractor,
@@ -38,14 +39,13 @@ class RecipesViewModel(
 
 
         channel.setMethodCallHandler { call, result ->
-            //println("flutter_srv: method=" + call.method + " args=" + call.arguments)
 
             when( call.method ) {
 
                 "getCategories" ->
                     launch {
                         try {
-                            val res = interactor.getCategoriesAsJson()
+                            val res = interactor.getCategoriesAsJsonFlow().first()
                             withContext(Dispatchers.Main) {result.success(res)}
                         } catch (e: Exception) {
                             withContext(Dispatchers.Main) {result.error("N/A", "Error during getCategories().", e.localizedMessage)}
@@ -55,9 +55,9 @@ class RecipesViewModel(
                     launch {
                         try {
                             val catId = call.arguments as Int
-                            val category = interactor.getCategories().find { it.id == catId.toLong() }
+                            val category = interactor.getCategoriesFlow().first().find { it.id == catId.toLong() }
                             category?.let {
-                                val res = interactor.getRecipesAsJson(it)
+                                val res = interactor.getRecipesAsJsonFlow(it).first()
                                 withContext(Dispatchers.Main) {result.success(res)}
                             }
                         } catch (e: Exception) {
