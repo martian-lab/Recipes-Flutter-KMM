@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:my_flutter_app/constants.dart';
+import 'package:recipes_flutter/constants.dart';
 
 class TitleWithMoreButton extends StatelessWidget {
   const TitleWithMoreButton({

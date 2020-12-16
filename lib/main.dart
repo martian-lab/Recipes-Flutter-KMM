@@ -5,13 +5,13 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:my_flutter_app/home_screen.dart';
+import 'package:recipes_flutter/home_screen.dart';
 import 'package:provider/provider.dart';
 import 'category.dart';
 import 'recipe.dart';
 import 'interactor/platform/platform.dart';
 import 'package:flutter/services.dart';
-import 'package:my_flutter_app/constants.dart';
+import 'package:recipes_flutter/constants.dart';
 
 void main() {
   runApp(

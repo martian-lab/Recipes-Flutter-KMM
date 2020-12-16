@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:my_flutter_app/category.dart';
-import 'package:my_flutter_app/constants.dart';
+import 'package:recipes_flutter/category.dart';
+import 'package:recipes_flutter/constants.dart';
 import '../main.dart';
 import 'header_with_searchbox.dart';
 import 'recipe_category.dart';

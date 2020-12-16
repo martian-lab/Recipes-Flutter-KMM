@@ -1,4 +1,4 @@
-# my_flutter_app
+# recipes_flutter
 
 A new Flutter application.
 

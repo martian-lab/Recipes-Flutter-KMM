@@ -1,4 +1,4 @@
-package com.martianlab.example.my_flutter_app
+package com.martianlab.recipes.flutter
 
 import com.martianlab.recipes.domain.api.RoutingApi
 import com.martianlab.recipes.entities.Destination

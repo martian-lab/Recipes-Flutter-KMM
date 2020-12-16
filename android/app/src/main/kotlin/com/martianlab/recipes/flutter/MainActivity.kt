@@ -1,13 +1,10 @@
-package com.martianlab.example.my_flutter_app
+package com.martianlab.recipes.flutter
 
 import android.os.Bundle
-import androidx.lifecycle.ViewModelProvider
 import com.martianlab.recipes.RecipesSDK
 import com.martianlab.recipes.data.sources.db_new.DatabaseDriverFactory
 import com.martianlab.recipes.domain.RecipesInteractor
-import com.martianlab.recipes.entities.Destination
 import io.flutter.embedding.android.FlutterActivity
-import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 

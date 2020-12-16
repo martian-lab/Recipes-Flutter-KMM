@@ -3,11 +3,11 @@ import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:my_flutter_app/category.dart';
-import 'package:my_flutter_app/components/recipeView.dart';
+import 'package:recipes_flutter/category.dart';
+import 'package:recipes_flutter/components/recipeView.dart';
 
-import 'package:my_flutter_app/constants.dart';
-import 'package:my_flutter_app/recipe.dart';
+import 'package:recipes_flutter/constants.dart';
+import 'package:recipes_flutter/recipe.dart';
 
 class RecipeCategory2 extends StatelessWidget {
   final Category category;

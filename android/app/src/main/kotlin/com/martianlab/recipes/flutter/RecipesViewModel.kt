@@ -1,4 +1,4 @@
-package com.martianlab.example.my_flutter_app
+package com.martianlab.recipes.flutter
 
 import androidx.lifecycle.ViewModel
 import com.martianlab.recipes.domain.RecipesInteractor
