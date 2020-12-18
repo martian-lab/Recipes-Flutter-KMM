@@ -39,4 +39,7 @@ interface RecipesInteractor {
     fun onBackPressed()
     
     suspend fun firstLaunchCheck()
+    fun getCategoriesAsJson(success: (String) -> Unit)
+    fun getRecipesAsJson(category: Category, success: (String) -> Unit)
+    fun firstLaunchCheck_()
 }

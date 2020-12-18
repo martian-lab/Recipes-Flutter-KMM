@@ -4,9 +4,13 @@ import com.martianlab.recipes.domain.api.BackendApi
 import com.martianlab.recipes.domain.api.DbApi
 import com.martianlab.recipes.domain.api.RoutingApi
 import com.martianlab.recipes.entities.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
@@ -32,10 +36,36 @@ internal class RecipesInteractorImpl constructor(
 //        recipesRepository.loadRecipesToDb()
 //    }
 
+    // called from Kotlin/Native clients
+    override fun getCategoriesAsJson(success: (String) -> Unit) {
+        GlobalScope.launch(Dispatchers.Main) {
+            getCategoriesAsJsonFlow().collect {
+                success(it)
+            }
+        }
+    }
+
+    // called from Kotlin/Native clients
+    override fun getRecipesAsJson(category: Category, success: (String) -> Unit) {
+        GlobalScope.launch(Dispatchers.Main) {
+            getRecipesAsJsonFlow(category).collect {
+                success(it)
+            }
+        }
+    }
+
+    // called from Kotlin/Native clients
+    override fun firstLaunchCheck_(){
+        GlobalScope.launch{
+            if( recipesRepository.getCategoriesFlow().first().isEmpty() ){
+                recipesRepository.loadDb()
+            }
+        }
+    }
+
     override suspend fun getCategoriesFlow(): Flow<List<Category>> {
         return recipesRepository.getCategoriesFlow()
     }
-
 
     override suspend fun getCategoriesAsJsonFlow(): Flow<String> 
         = getCategoriesFlow().map { serializer.encodeToString(it) }
