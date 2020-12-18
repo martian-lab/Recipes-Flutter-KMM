@@ -9,7 +9,7 @@ import com.martianlab.recipes.entities.RecipeIngredient
 import kotlinx.coroutines.flow.Flow
 
 interface RecipesInteractor {
-    fun goTo( destination: Destination)
+//    fun goTo( destination: Destination)
 
 
     //suspend fun getCategories() : List<Category>
@@ -36,7 +36,7 @@ interface RecipesInteractor {
 //    suspend fun setFavorite(recipe: Recipe)
 //    suspend fun removeFavorite(recipe: Recipe)
 //    suspend fun getFavorites(): List<Recipe>
-    fun onBackPressed()
+//    fun onBackPressed()
     
     suspend fun firstLaunchCheck()
     fun getCategoriesAsJson(success: (String) -> Unit)

@@ -17,20 +17,20 @@ import kotlinx.serialization.json.Json
 
 internal class RecipesInteractorImpl constructor(
     private val recipesRepository: RecipesRepository,
-    private val dbApi: DbApi,
-    private val backendApi: BackendApi,
-    private val router : RoutingApi
+//    private val dbApi: DbApi,
+//    private val backendApi: BackendApi,
+    //private val router : RoutingApi
 ) : RecipesInteractor{
 
     private val serializer = Json { isLenient = true; ignoreUnknownKeys = true }
-    
-    override fun onBackPressed() {
-        router.goBack()
-    }
-
-    override fun goTo(destination: Destination){
-        router.goTo(destination)
-    }
+//
+//    override fun onBackPressed() {
+//        router.goBack()
+//    }
+//
+//    override fun goTo(destination: Destination){
+//        router.goTo(destination)
+//    }
 
 //    override suspend fun loadToDb() {
 //        recipesRepository.loadRecipesToDb()
