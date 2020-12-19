@@ -84,8 +84,8 @@ class Body extends StatelessWidget {
                               itemCount: min(category.recipes.length, 15),
                               scrollDirection: Axis.horizontal,
                               itemBuilder: (context, i) {
-                                return Provider<Recipe>(
-                                    create: (_) => category.recipes[i], child: RecipeCard());
+                                return Provider<Recipe>.value(
+                                    value: category.recipes[i], child: RecipeCard());
                               }));
                     })
                   ],

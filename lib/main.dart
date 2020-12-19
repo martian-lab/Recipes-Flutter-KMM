@@ -9,8 +9,6 @@ import 'models/loader.dart';
 import 'screens/homeScreen.dart';
 import 'screens/recipeDetails.dart';
 
-
-
 void main() {
   runApp(RecipesApp());
 }
@@ -18,11 +16,9 @@ void main() {
 class RecipesApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // Using MultiProvider is convenient when providing multiple objects.
-    return MultiProvider(
-      providers: [
-        FutureProvider<List<Category>>(create: (context) => RecipesViewModel().categories, initialData: List.empty(),)
-      ],
+    return FutureProvider<List<Category>>.value(
+      value: RecipesViewModel().categories,
+      initialData: List.empty(),
       child: MaterialApp(
         title: 'Recipes Demo',
         theme: appTheme(context),
