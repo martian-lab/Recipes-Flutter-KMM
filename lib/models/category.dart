@@ -3,7 +3,7 @@
 
 
 //@JsonSerializable()
-import 'package:recipes_flutter/recipe.dart';
+import 'package:recipes_flutter/models/recipe.dart';
 
 class Category{
 
