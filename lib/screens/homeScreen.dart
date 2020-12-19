@@ -67,25 +67,25 @@ class Body extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           itemCount: categories.length,
           itemBuilder: (context, i) {
-            var category = categories[i];
-            return Provider<List<Recipe>>(
-                create: (context) => category.recipes,
+            return ChangeNotifierProvider<Category>.value(
+                value:  categories[i],
                 child: Column(
                   children: <Widget>[
                     TitleWithCustomUnderline(
-                      title: category.title,
+                      title: categories[i].title,
                     ),
-                    Consumer<List<Recipe>>(builder: (context, List<Recipe> recipes, child){
+                    Consumer<Category>(builder: (context, Category category, child){
+                      print('category updated, cat=' + category.title + " " + category.recipes.length.toString());
                       return Container(
                           height: 300,
                           child: ListView.builder(
                               shrinkWrap: true,
                               physics: ClampingScrollPhysics(),
-                              itemCount: min(recipes.length, 15),
+                              itemCount: min(category.recipes.length, 15),
                               scrollDirection: Axis.horizontal,
                               itemBuilder: (context, i) {
                                 return Provider<Recipe>(
-                                    create: (_) => recipes[i], child: RecipeCard());
+                                    create: (_) => category.recipes[i], child: RecipeCard());
                               }));
                     })
                   ],

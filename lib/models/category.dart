@@ -1,11 +1,7 @@
-// import 'package:json_annotation/json_annotation.dart';
-// part 'category.g.dart';
-
-
-//@JsonSerializable()
+import 'package:flutter/foundation.dart';
 import 'package:recipes_flutter/models/recipe.dart';
 
-class Category{
+class Category extends ChangeNotifier{
 
   int id;
   String title;
@@ -13,6 +9,11 @@ class Category{
   int sort;
   int total;
   List<Recipe> recipes = [];
+
+  void setRecipes(List<Recipe> recipes){
+    this.recipes = recipes;
+    notifyListeners();
+  }
 
   Category(this.id, this.title, this.imageUrl, this.sort, this.total);
 

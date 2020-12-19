@@ -25,7 +25,7 @@ class Loader {
       var categories = parsedJson.map((model) => Category.fromJson(model))
           .toList();
       categories.forEach((category) {
-        loadRecipes(category).then((value) => category.recipes = value);
+        loadRecipes(category).then((recipes) => category.setRecipes(recipes));
       });
       return categories;
     });
