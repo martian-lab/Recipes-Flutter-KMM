@@ -20,11 +20,11 @@ class RecipeCategory extends StatelessWidget {
           ),
           //category.recipes.isEmpty ? CircularProgressIndicator() :
           Container(
-              height: 300,
+              height: 280,
               child: ListView.builder(
                   shrinkWrap: true,
                   physics: ClampingScrollPhysics(),
-                  itemCount: min(category.recipes.length, 15),
+                  itemCount: min(category.recipes.length, 150),
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, i) {
                     return Provider<Recipe>.value(
