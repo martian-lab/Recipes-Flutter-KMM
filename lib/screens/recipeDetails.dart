@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:recipes_flutter/recipe.dart';
+import 'package:provider/provider.dart';
+import 'package:recipes_flutter/models/recipe.dart';
 
-class RecipeView extends StatelessWidget {
-  final Recipe recipe;
-
-  RecipeView(this.recipe);
+class RecipeDetails extends StatelessWidget {
+  static const routeName = '/recipe';
 
   @override
   Widget build(BuildContext context) {
+    final Recipe recipe = ModalRoute.of(context).settings.arguments;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(recipe.title),

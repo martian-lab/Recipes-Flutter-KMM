@@ -11,7 +11,8 @@ import io.flutter.plugin.common.MethodChannel
 class MainActivity: FlutterActivity() {
     private val CHANNEL = "recipes/platform"
 
-    val interactor: RecipesInteractor = RecipesSDK(DatabaseDriverFactory(context), RouterImpl()).interactor
+    val interactor: RecipesInteractor = RecipesSDK(DatabaseDriverFactory(context)).interactor
+
     lateinit var viewModel: RecipesViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {

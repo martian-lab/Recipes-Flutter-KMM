@@ -12,14 +12,13 @@ import com.martianlab.recipes.domain.api.DbApi
 import com.martianlab.recipes.domain.api.RoutingApi
 
 class RecipesSDK(
-    driverFactory: DatabaseDriverFactory,
-    routing: RoutingApi
+    driverFactory: DatabaseDriverFactory
 ) {
 
     private val db : DbApi = DbImpl(driverFactory)
     private val backend : BackendApi = BackendKtorImpl()
     private val recipesRepository : RecipesRepository = RecipesRepositoryImpl(db, backend)
 
-    val interactor : RecipesInteractor = RecipesInteractorImpl(recipesRepository, db, backend, routing)
+    val interactor : RecipesInteractor = RecipesInteractorImpl(recipesRepository)
 
 }
