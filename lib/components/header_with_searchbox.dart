@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:recipes_flutter/constants.dart';
+import 'package:recipes_flutter/common/constants.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class HeaderWithSearchBox extends StatelessWidget {

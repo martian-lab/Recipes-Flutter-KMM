@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:recipes_flutter/common/theme.dart';
-import 'package:recipes_flutter/main_.dart';
 import 'package:recipes_flutter/models/category.dart';
-import 'package:recipes_flutter/models/recipe.dart';
 
-import 'models/loader.dart';
+import 'models/viewModel.dart';
 import 'screens/homeScreen.dart';
 import 'screens/recipeDetails.dart';
 
