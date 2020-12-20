@@ -4,7 +4,6 @@ plugins {
     kotlin("multiplatform")
     kotlin("plugin.serialization")
     id("com.android.library")
-    id("kotlin-android-extensions")
     id("com.squareup.sqldelight")
 }
 group = "com.martianlab.recipes"

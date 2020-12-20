@@ -18,7 +18,20 @@ class Recipe{
   List<RecipeIngredient> ingredients;
   List<RecipeComment> comments;
 
-  Recipe(this.id, this.title, this.imageURL);
+
+  Recipe(
+      this.id,
+      this.title,
+      this.imageURL,
+      this.text,
+      this.complexity,
+      this.personCount,
+      this.rating,
+      this.ratingVotes,
+      this.tags,
+      this.stages,
+      this.ingredients,
+      this.comments);
 
   Recipe.fromJson(Map<String, dynamic> data) {
     id = data['id'];

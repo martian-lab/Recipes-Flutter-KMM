@@ -17,9 +17,10 @@ class RecipeCategory extends StatelessWidget {
         children: <Widget>[
           TitleWithCustomUnderline(
             title: category.title,
+            recipeNum: category.recipes.length,
           ),
           Container(
-              height: 280,
+              height: 260,
               child: category.recipes.isEmpty ? Center( child: CircularProgressIndicator() ) :
                 ListView.builder(
                   shrinkWrap: true,

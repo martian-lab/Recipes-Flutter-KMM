@@ -37,10 +37,12 @@ class TitleWithMoreButton extends StatelessWidget {
 class TitleWithCustomUnderline extends StatelessWidget {
   const TitleWithCustomUnderline({
     Key key,
-    this.title
+    this.title,
+    this.recipeNum
   }) : super(key: key);
 
   final String title;
+  final int recipeNum;
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +53,7 @@ class TitleWithCustomUnderline extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(left: kDefaultPadding / 4),
             child: Text(
-              title,
+              "$title ($recipeNum рец.)" ,
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
           ),
