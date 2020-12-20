@@ -6,6 +6,23 @@ CREATE TABLE IF NOT EXISTS `categoryEntity` (
     `total` INTEGER as Int NOT NULL
 );
 
+INSERT INTO categoryEntity VALUES(1,NULL,'Первые блюда',10,56);
+INSERT INTO categoryEntity VALUES(2,NULL,'Салаты',6,84);
+INSERT INTO categoryEntity VALUES(3,NULL,'Горячие закуски',8,63);
+INSERT INTO categoryEntity VALUES(4,NULL,'Основные блюда',9,240);
+INSERT INTO categoryEntity VALUES(5,NULL,'Выпечка',3,141);
+INSERT INTO categoryEntity VALUES(8,NULL,'Напитки',5,73);
+INSERT INTO categoryEntity VALUES(9,NULL,'Консервация и заготовки',1,39);
+INSERT INTO categoryEntity VALUES(12,NULL,'Холодные закуски',7,51);
+INSERT INTO categoryEntity VALUES(16,NULL,'Десерты',4,150);
+INSERT INTO categoryEntity VALUES(19,NULL,'Пикник на природе',11,12);
+INSERT INTO categoryEntity VALUES(27,NULL,'Соусы и маринады',0,51);
+INSERT INTO categoryEntity VALUES(29,NULL,'Полезные советы',12,12);
+INSERT INTO categoryEntity VALUES(31,NULL,'Завтраки',13,86);
+INSERT INTO categoryEntity VALUES(41,NULL,'Хлеб и тесто',14,31);
+INSERT INTO categoryEntity VALUES(43,NULL,'Пасха',15,14);
+INSERT INTO categoryEntity VALUES(45,NULL,'Здоровое питание',16,16);
+
 getAll:
 SELECT *
 FROM categoryEntity;
