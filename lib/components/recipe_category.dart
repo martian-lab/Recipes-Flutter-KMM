@@ -18,12 +18,12 @@ class RecipeCategory extends StatelessWidget {
           TitleWithCustomUnderline(
             title: category.title,
           ),
-          //category.recipes.isEmpty ? CircularProgressIndicator() :
           Container(
               height: 280,
-              child: ListView.builder(
+              child: category.recipes.isEmpty ? Center( child: CircularProgressIndicator() ) :
+                ListView.builder(
                   shrinkWrap: true,
-                  physics: ClampingScrollPhysics(),
+                  //physics: ClampingScrollPhysics(),
                   itemCount: min(category.recipes.length, 150),
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, i) {
