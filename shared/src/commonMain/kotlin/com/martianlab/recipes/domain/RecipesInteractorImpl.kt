@@ -86,10 +86,10 @@ internal class RecipesInteractorImpl constructor(
     
     
 
-    override suspend fun firstLaunchCheck() {
-        if( recipesRepository.getCategoriesFlow().first().isEmpty() ){
-            recipesRepository.loadDb()
-        }
+    override suspend fun updatesCheck() {
+        recipesRepository.getCategoriesFromBackend()
+                .filter { it.total != getRecipesFlow(it).first().size }
+                .forEach { recipesRepository.loadCategoryRecipesToDb(it) }
     }
 
 //    override suspend fun searchIngredients(contains: String): List<RecipeIngredient> = recipesRepository.searchIngredients(contains)

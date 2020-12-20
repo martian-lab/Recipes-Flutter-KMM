@@ -38,7 +38,7 @@ interface RecipesInteractor {
 //    suspend fun getFavorites(): List<Recipe>
 //    fun onBackPressed()
     
-    suspend fun firstLaunchCheck()
+    suspend fun updatesCheck()
     fun getCategoriesAsJson(success: (String) -> Unit)
     fun getRecipesAsJson(category: Category, success: (String) -> Unit)
     fun firstLaunchCheck_()

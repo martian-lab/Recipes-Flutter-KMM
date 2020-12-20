@@ -13,7 +13,7 @@ class RecipesViewModel(
 
     init{
         launch {
-            interactor.firstLaunchCheck()
+            interactor.updatesCheck()
             withContext(Dispatchers.Main) {
                     channel.invokeMethod("updateCategoryList", null)
             }

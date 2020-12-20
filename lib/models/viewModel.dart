@@ -11,6 +11,7 @@ class RecipesViewModel extends ChangeNotifier {
     platform.setMethodCallHandler((call) async {
       if( call.method == 'updateCategoryList'){
         categories = Loader.loadCategories();
+        notifyListeners();
       }
     });
   }

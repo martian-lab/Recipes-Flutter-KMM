@@ -34,4 +34,6 @@ internal interface RecipesRepository {
     //suspend fun getCategories(): List<Category>
     
     suspend fun loadDb()
+    suspend fun getCategoriesFromBackend(): List<Category>
+    suspend fun loadCategoryRecipesToDb(category: Category)
 }

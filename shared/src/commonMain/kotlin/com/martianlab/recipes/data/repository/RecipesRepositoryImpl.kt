@@ -38,7 +38,7 @@ internal class RecipesRepositoryImpl constructor(
          dbApi.getRecipesFlow(tags[0])
 
     
-    private suspend fun loadCategoryRecipesToDb(category : Category ){
+    override suspend fun loadCategoryRecipesToDb(category : Category ){
         val count = 20
         var offset = 0
         //println("RECIPES: category=" + category)
@@ -60,7 +60,7 @@ internal class RecipesRepositoryImpl constructor(
     }
     
 
-    private suspend fun getCategoriesFromBackend() : List<Category>{
+    override suspend fun getCategoriesFromBackend() : List<Category>{
         val result: Result<List<Category>> = backendApi.getCategories()
         val categoryList = if( result is Result.Success ){
             //println("RECIPES:: cats=" + result.data)
