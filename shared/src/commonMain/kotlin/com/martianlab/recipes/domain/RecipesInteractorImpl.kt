@@ -6,10 +6,7 @@ import com.martianlab.recipes.domain.api.RoutingApi
 import com.martianlab.recipes.entities.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -86,10 +83,12 @@ internal class RecipesInteractorImpl constructor(
     
     
 
-    override suspend fun updatesCheck() {
-        recipesRepository.getCategoriesFromBackend()
-                .filter { it.total != getRecipesFlow(it).first().size }
-                .forEach { recipesRepository.loadCategoryRecipesToDb(it) }
+    override suspend fun updatesCheck() : Flow<Long>{
+        return flow{
+            recipesRepository.getCategoriesFromBackend()
+                    .filter { it.total != getRecipesFlow(it).first().size }
+                    .forEach { recipesRepository.loadCategoryRecipesToDb(it); emit(it.id) }
+        }
     }
 
 //    override suspend fun searchIngredients(contains: String): List<RecipeIngredient> = recipesRepository.searchIngredients(contains)

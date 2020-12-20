@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import com.martianlab.recipes.domain.RecipesInteractor
 import io.flutter.plugin.common.MethodChannel
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 
 class RecipesViewModel(
@@ -13,29 +14,12 @@ class RecipesViewModel(
 
     init{
         launch {
-            interactor.updatesCheck()
-            withContext(Dispatchers.Main) {
-                    channel.invokeMethod("updateCategoryList", null)
+            interactor.updatesCheck().collect {
+                withContext(Dispatchers.Main) {
+                    channel.invokeMethod("updateCategory", it)
+                }
             }
         }
-//            interactor.getCategoriesAsJsonFlow().collect {
-//                withContext(Dispatchers.Main) {
-//                    channel.invokeMethod("updateCategoryList", it)
-//                }
-//            }
-//        }
-//        launch {
-//            interactor.getCategories().forEach { category ->
-//                launch {
-//                    val cats = interactor.getCategories()
-//                    interactor.getRecipesAsJsonFlow(cats[3]).collect {
-//                        withContext(Dispatchers.Main) {
-//                            channel.invokeMethod("updateRecipeList", mapOf("categoryId" to 0, "recipeList" to it))
-//                        }
-//                    }
-//                }
- //           }
- //       }
 
 
         channel.setMethodCallHandler { call, result ->
@@ -51,6 +35,9 @@ class RecipesViewModel(
                             withContext(Dispatchers.Main) {result.error("N/A", "Error during getCategories().", e.localizedMessage)}
                         }
                     }
+
+
+
                 "getRecipesByCategory" ->
                     launch {
                         try {

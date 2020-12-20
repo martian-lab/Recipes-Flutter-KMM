@@ -14,9 +14,8 @@ void main() {
 class RecipesApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return FutureProvider<List<Category>>.value(
-      value: RecipesViewModel().categories,
-      initialData: List.empty(),
+    return ChangeNotifierProvider<RecipesViewModel>(
+      create: (context) => RecipesViewModel(),
       child: MaterialApp(
         title: 'Recipes Demo',
         theme: appTheme(context),

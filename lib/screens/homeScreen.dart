@@ -7,6 +7,7 @@ import 'package:recipes_flutter/components/recipe_category.dart';
 import 'package:recipes_flutter/components/title_with_more_button.dart';
 import 'package:recipes_flutter/models/category.dart';
 import 'package:recipes_flutter/models/recipe.dart';
+import 'package:recipes_flutter/models/viewModel.dart';
 import 'package:recipes_flutter/screens/recipeDetails.dart';
 
 class MainPage extends StatelessWidget {
@@ -27,9 +28,10 @@ class MainPage extends StatelessWidget {
 class Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Consumer<List<Category>>(
-        builder: (context, List<Category> categories, child) {
-      return ListView.builder(
+    return Consumer<RecipesViewModel>(
+        builder: (context, RecipesViewModel viewModel, child) {
+          var categories = viewModel.categories;
+          return ListView.builder(
           padding: const EdgeInsets.all(16),
           itemCount: categories.length,
           itemBuilder: (context, i) {

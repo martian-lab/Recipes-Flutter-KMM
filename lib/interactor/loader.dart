@@ -20,11 +20,9 @@ class Loader {
     return catList;
   }
 
-
   static Future<List<Recipe>> loadRecipes(Category category) {
-    print('load category id=' + category.id.toString());
-    Future<String> res = platform.invokeMethod(
-        "getRecipesByCategory", category.id);
+    //print('load category id=' + category.id.toString());
+    Future<String> res = platform.invokeMethod("getRecipesByCategory", category.id);
 
     var result = res.then((String value) async {
       var parsedJson = json.decode(value) as List;
