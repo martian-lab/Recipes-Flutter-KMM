@@ -9,7 +9,6 @@ import com.martianlab.recipes.domain.RecipesInteractorImpl
 import com.martianlab.recipes.domain.RecipesRepository
 import com.martianlab.recipes.domain.api.BackendApi
 import com.martianlab.recipes.domain.api.DbApi
-import com.martianlab.recipes.domain.api.RoutingApi
 
 class RecipesSDK(
     driverFactory: DatabaseDriverFactory
