@@ -30,6 +30,13 @@ kotlin {
     val sqlDelightVersion: String by project
     val coroutinesVersion = "1.3.9-native-mt"
     //val koin = "3.0.0-alpha-4"
+    val onPhone = System.getenv("SDK_NAME")?.startsWith("iphoneos") ?: false
+    if (onPhone) {
+        iosArm64("ios")
+    } else {
+        iosX64("ios")
+    }
+
 
     sourceSets {
         val commonMain by getting {
@@ -73,6 +80,7 @@ kotlin {
         val iosTest by getting
     }
 }
+
 android {
     compileSdkVersion(30)
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
