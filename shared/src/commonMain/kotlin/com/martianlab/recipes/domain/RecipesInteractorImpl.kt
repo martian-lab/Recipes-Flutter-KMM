@@ -34,21 +34,16 @@ internal class RecipesInteractorImpl constructor(
 //    }
 
     // called from Kotlin/Native clients
-    override fun getCategoriesAsJson(success: (String) -> Unit) {
-        GlobalScope.launch(Dispatchers.Main) {
-            getCategoriesAsJsonFlow().collect {
-                success(it)
-            }
-        }
-    }
+    override suspend fun getCategoriesAsJson() : String =
+        getCategoriesAsJsonFlow().first()
+    
 
     // called from Kotlin/Native clients
-    override fun getRecipesAsJson(category: Category, success: (String) -> Unit) {
-        GlobalScope.launch(Dispatchers.Main) {
-            getRecipesAsJsonFlow(category).collect {
-                success(it)
-            }
-        }
+    override suspend fun getRecipesAsJson(catId: String) : String {
+        val category = getCategoriesFlow().first().find{ it.id == catId.toLong() }
+        return category?.let{
+            return getRecipesAsJsonFlow(category).first()
+        } ?: ""
     }
 
     // called from Kotlin/Native clients

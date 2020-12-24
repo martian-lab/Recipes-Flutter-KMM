@@ -27,7 +27,7 @@ import shared
       
         switch call.method {
             case "getCategories":
-                self.getCategories(result: result)
+                self.getCategories(fresult: result)
             case "getRecipesByCategory":
                 self.getRecipesByCategory(call: call, result: result)
             default:
@@ -40,12 +40,15 @@ import shared
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
     
-    func getCategories(result: FlutterResult) {
-        guard let oAuthUrl = recipesInteractor?.getCategoriesAsJson(success: <#T##(String) -> Void#>) else {
-            result(FlutterMethodNotImplemented)
+    func getCategories(fresult: @escaping FlutterResult) {
+        var catJson : String?
+        guard let oAuthUrl = recipesInteractor?.getCategoriesAsJson(completionHandler:{ response, err in
+            fresult(response)
+        }) else {
+            fresult(FlutterMethodNotImplemented)
             return;
         }
-        result(oAuthUrl)
+        fresult(oAuthUrl)
     }
     
     func getRecipesByCategory(call: FlutterMethodCall, result: @escaping FlutterResult) {
@@ -55,8 +58,8 @@ import shared
           return
         }
         if let myArgs = args as? [String: Any],
-            let catId = myArgs["catId"] as? Int {
-            recipesInteractor.getRecipesAsJson(category: <#T##Category#>, success: <#T##(String) -> Void#>)(oauthRedirect: url, callback: {
+            let catId = myArgs["catId"] as? String {
+            recipesInteractor.getRecipesAsJson(catId: catId, completionHandler:{
                 response, err in
                 if err == nil {
                     result(true)

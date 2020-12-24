@@ -39,7 +39,7 @@ interface RecipesInteractor {
 //    fun onBackPressed()
     
     suspend fun updatesCheck(): Flow<Long>
-    fun getCategoriesAsJson(success: (String) -> Unit)
-    fun getRecipesAsJson(category: Category, success: (String) -> Unit)
+    @Throws(Exception::class) suspend fun getCategoriesAsJson() : String
+    @Throws(Exception::class) suspend fun getRecipesAsJson(catId: String) : String
     fun firstLaunchCheck_()
 }
