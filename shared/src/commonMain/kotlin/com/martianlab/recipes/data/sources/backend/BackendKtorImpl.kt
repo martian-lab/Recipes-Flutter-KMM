@@ -1,5 +1,6 @@
     package com.martianlab.data.sources.backend
 
+import com.martianlab.recipes.data.sources.backend.HttpClientFactory
 import com.martianlab.recipes.domain.api.BackendApi
 import com.martianlab.recipes.entities.Category
 import com.martianlab.recipes.entities.Recipe
@@ -19,16 +20,16 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 
 
-internal class BackendKtorImpl() : BackendApi{
+internal class BackendKtorImpl(httpClientFactory: HttpClientFactory) : BackendApi{
 
     private val URL = "http://www.utkonos.ru/api/rest/"
     private val nonStrictJson = Json { isLenient = true; ignoreUnknownKeys = true }
 
-    val client: HttpClient = HttpClient{
+    val client: HttpClient = httpClientFactory.createHttpClient() /*HttpClient{
         install(JsonFeature) {
             serializer = KotlinxSerializer(nonStrictJson)
         }
-    }
+    }*/
 
     private val apiHelper = ApiHelper(client, URL)
 

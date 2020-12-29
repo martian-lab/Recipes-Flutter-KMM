@@ -12,8 +12,9 @@ import shared
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
-
-    sdk = RecipesSDK.init(driverFactory: DatabaseDriverFactory())
+    
+    sdk = RecipesSDK.init(httpClientFactory: HttpClientFactory(),
+                          driverFactory: DatabaseDriverFactory())
 
     recipesInteractor = sdk.interactor
     
@@ -41,14 +42,14 @@ import shared
   }
     
     func getCategories(fresult: @escaping FlutterResult) {
-        var catJson : String?
-        guard let oAuthUrl = recipesInteractor?.getCategoriesAsJson(completionHandler:{ response, err in
+        //var catJson : String?
+        guard let catJson = recipesInteractor?.getCategoriesAsJson(completionHandler:{ response, err in
             fresult(response)
         }) else {
             fresult(FlutterMethodNotImplemented)
             return;
         }
-        fresult(oAuthUrl)
+        fresult(catJson)
     }
     
     func getRecipesByCategory(call: FlutterMethodCall, result: @escaping FlutterResult) {
