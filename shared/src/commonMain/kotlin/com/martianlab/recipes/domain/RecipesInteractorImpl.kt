@@ -81,10 +81,12 @@ internal class RecipesInteractorImpl constructor(
         }
     }
 
-    override suspend fun setUpdatesListener(listener: (Int) -> Unit) {
-        updatesCheck().collect {
-            withContext(Dispatchers.Main) {
-                listener(it.toInt())
+    override fun setUpdatesListener(listener: (Int) -> Unit) {
+        GlobalScope.launch(Dispatchers.Main){
+            updatesCheck().collect {
+                withContext(Dispatchers.Main) {
+                    listener(it.toInt())
+                }
             }
         }
     }

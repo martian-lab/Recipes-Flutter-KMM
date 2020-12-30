@@ -38,10 +38,24 @@ import shared
             }
     })
 
+    setUpdateListener(with: recipeChannel)
+    
     
     GeneratedPluginRegistrant.register(with: self)
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
+    
+    
+    func setUpdateListener(with recipeChannel: FlutterMethodChannel) {
+        
+        //recipesInteractor.setUpdatesListener()
+        
+        
+        recipesInteractor.setUpdatesListener { id in
+            recipeChannel.invokeMethod("updateCategory", arguments: id)
+        }
+        
+    }
     
     func getCategories(fresult: @escaping FlutterResult) {
         //var catJson : String?
