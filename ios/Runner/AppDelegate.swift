@@ -13,6 +13,8 @@ import shared
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
     
+    print("result1=")
+    
     sdk = RecipesSDK.init(httpClientFactory: HttpClientFactory(),
                           driverFactory: DatabaseDriverFactory())
 
@@ -46,10 +48,10 @@ import shared
         guard let catJson = recipesInteractor?.getCategoriesAsJson(completionHandler:{ response, err in
             fresult(response)
         }) else {
-            fresult(FlutterMethodNotImplemented)
+            //fresult(FlutterMethodNotImplemented)
             return;
         }
-        fresult(catJson)
+        //fresult(catJson)
     }
     
     func getRecipesByCategory(call: FlutterMethodCall, result: @escaping FlutterResult) {
@@ -58,12 +60,11 @@ import shared
             "flutter arguments in method: (getRecipesAsCategory)", details: nil))
           return
         }
-        if let myArgs = args as? [String: Any],
-            let catId = myArgs["catId"] as? String {
-            recipesInteractor.getRecipesAsJson(catId: catId, completionHandler:{
+        if let catId = args as? Int32 {
+            recipesInteractor.getRecipesAsJson(catId: String(catId), completionHandler:{
                 response, err in
                 if err == nil {
-                    result(true)
+                    result(response)
                 } else {
                     result(FlutterError(code: "-2", message: "Error during login " +
                         "in method (login)", details: nil))
