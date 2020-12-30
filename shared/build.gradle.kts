@@ -28,7 +28,7 @@ kotlin {
     val ktorVersion = "1.4.1"
     val serializationVersion = "1.0.0-RC"
     val sqlDelightVersion: String by project
-    val coroutinesVersion = "1.3.9-native-mt"
+    val coroutinesVersion = "1.4.2-native-mt"
     //val koin = "3.0.0-alpha-4"
     val onPhone = System.getenv("SDK_NAME")?.startsWith("iphoneos") ?: false
     if (onPhone) {
@@ -41,9 +41,9 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9-native-mt"){
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2-native-mt"){
                     version {
-                        strictly("1.3.9-native-mt")
+                        strictly("1.4.2-native-mt")
                     }
                 }
 
@@ -54,7 +54,7 @@ kotlin {
 
                 implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.1.1")
                 //api("org.koin:koin-core:$koin")
-                implementation( "com.squareup.sqldelight:coroutines-extensions:$sqlDelightVersion" )
+                //implementation( "com.squareup.sqldelight:coroutines-extensions:$sqlDelightVersion" )
             }
         }
         val commonTest by getting {
