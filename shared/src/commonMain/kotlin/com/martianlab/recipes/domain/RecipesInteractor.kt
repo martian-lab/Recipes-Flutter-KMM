@@ -41,5 +41,5 @@ interface RecipesInteractor {
     suspend fun updatesCheck(): Flow<Long>
     @Throws(Exception::class) suspend fun getCategoriesAsJson() : String
     @Throws(Exception::class) suspend fun getRecipesAsJson(catId: String) : String
-    fun firstLaunchCheck_()
+    @Throws(Exception::class) suspend fun setUpdatesListener(listener : (Int) -> Unit)
 }

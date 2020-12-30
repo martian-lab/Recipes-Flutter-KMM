@@ -8,6 +8,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
@@ -47,7 +48,7 @@ internal class RecipesInteractorImpl constructor(
     }
 
     // called from Kotlin/Native clients
-    override fun firstLaunchCheck_(){
+    fun firstLaunchCheck_(){
         GlobalScope.launch{
             if( recipesRepository.getCategoriesFlow().first().isEmpty() ){
                 recipesRepository.loadDb()
@@ -86,7 +87,15 @@ internal class RecipesInteractorImpl constructor(
         }
     }
 
-//    override suspend fun searchIngredients(contains: String): List<RecipeIngredient> = recipesRepository.searchIngredients(contains)
+    override suspend fun setUpdatesListener(listener: (Int) -> Unit) {
+        updatesCheck().collect {
+            withContext(Dispatchers.Main) {
+                listener(it.toInt())
+            }
+        }
+    }
+
+    //    override suspend fun searchIngredients(contains: String): List<RecipeIngredient> = recipesRepository.searchIngredients(contains)
 //    override suspend fun searchRecipes(contains: String): Flow<List<Recipe>> = recipesRepository.searchRecipes(contains)
 //    override suspend fun setFavorite(recipe: Recipe) = recipesRepository.setFavorite(recipe)
 //    override suspend fun removeFavorite(recipe: Recipe) = recipesRepository.removeFavorite(recipe)
