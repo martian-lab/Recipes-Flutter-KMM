@@ -20,7 +20,7 @@ class RecipeCategory extends StatelessWidget {
             recipeNum: category.recipes.length,
           ),
           Container(
-              height: 260,
+              height: MediaQuery.of(context).size.height * .3 + 28,
               child: category.recipes.isEmpty ? Center( child: CircularProgressIndicator() ) :
                 ListView.builder(
                   shrinkWrap: true,
