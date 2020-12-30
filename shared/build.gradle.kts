@@ -25,6 +25,14 @@ kotlin {
         }
     }
 
+    mingwX64("native") {
+        binaries {
+            sharedLib {
+                baseName = "libnative"
+            }
+        }
+    }
+
     val ktorVersion = "1.4.1"
     val serializationVersion = "1.0.0-RC"
     val sqlDelightVersion: String by project
@@ -83,6 +91,12 @@ kotlin {
             }
         }
         val iosTest by getting
+
+        val nativeMain by getting {
+            dependencies {
+                implementation("com.squareup.sqldelight:native-driver:$sqlDelightVersion")
+            }
+        }
     }
 }
 
