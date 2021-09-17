@@ -11,7 +11,10 @@ cd android
 ./gradlew packForXcode
 ```
 
-Then you can run the app on the iOS simulator
+Then you can run the app on the iOS simulator:
+
+
+![iOS screenshot](https://user-images.githubusercontent.com/2521164/133771621-1a94cb2f-b60d-4ce0-ad5b-0452dacd952a.png)
 
 
 ### License
