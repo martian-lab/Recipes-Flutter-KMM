@@ -1,5 +1,3 @@
-# recipes_flutter
-
 Recipes KMM+Flutter
 =====================
 
