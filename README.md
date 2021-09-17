@@ -3,7 +3,11 @@ Recipes KMM+Flutter
 
 This repository is the [Recipes Multiplatform](https://github.com/topinambur/recipes_multiplatform) sample project, with UI rewrited using [Flutter](https://flutter.dev)
 
-to run the iOS version you need to pack the KMM library into iOS framework by the following command:
+To run the app you need to install the Flutter plugin to Android Studio as well as Flutter+Dart itself. Then you need to add these dependencies to your AndroidStudio project
+
+You can run the Android version without any additional actions, just add the Flutter tj your project, select device to run and hit the "run" button
+
+To run the iOS version you need before to pack the KMM library into iOS framework by the following command:
 ```
 cd android
 ./gradlew packForXcode
