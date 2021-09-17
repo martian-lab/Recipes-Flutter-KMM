@@ -6,8 +6,10 @@ Recipes KMM+Flutter
 This repository is the [Recipes Multiplatform](https://github.com/topinambur/recipes_multiplatform) sample project, with UI rewrited using the [Flutter]
 
 to run the iOS version you need to pack the KMM library into iOS framework by the following command:
+```
 cd android
 ./gradlew packForXcode
+```
 
 Then you can run the app on the iOS simulator
 
