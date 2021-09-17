@@ -3,7 +3,7 @@
 Recipes KMM+Flutter
 =====================
 
-This repository is the [Recipes Multiplatform](https://github.com/topinambur/recipes_multiplatform) sample project, with UI rewrited using the [Flutter]
+This repository is the [Recipes Multiplatform](https://github.com/topinambur/recipes_multiplatform) sample project, with UI rewrited using the [Flutter](https://flutter.dev)
 
 to run the iOS version you need to pack the KMM library into iOS framework by the following command:
 ```
